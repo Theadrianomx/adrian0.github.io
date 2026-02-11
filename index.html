@@ -2,90 +2,99 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>THE ADRIANO MX</title>
+<title>Multiversal Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Optimización carga imágenes -->
+<link rel="preconnect" href="https://i.postimg.cc">
 
 <style>
 :root{
   --neon-blue:#00f0ff;
   --neon-red:#ff003c;
+  --text:#eaffff;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
-  font-family:system-ui,Segoe UI,Arial;
-  background:black;
-  color:white;
   min-height:100vh;
+  font-family:system-ui,Segoe UI,Arial;
+  color:var(--text);
+  overflow-x:hidden;
+  background:black;
 }
 
-/* ================= FONDO DINÁMICO ================= */
+/* ================= FONDO ================= */
 #bg{
   position:fixed;
   inset:0;
   background-size:cover;
   background-position:center;
-  filter:blur(18px) brightness(.4);
+  filter:blur(14px) brightness(.45);
   transform:scale(1.1);
-  z-index:-2;
+  z-index:-3;
+  opacity:1;
+  transition:opacity .8s ease;
 }
 
 #overlay{
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at center, rgba(0,240,255,.15), rgba(0,0,0,.85) 70%);
+  background:
+    radial-gradient(circle at top, rgba(0,240,255,.12), rgba(0,0,0,.85) 70%),
+    radial-gradient(circle at 80% 30%, rgba(255,0,60,.08), rgba(0,0,0,0) 55%);
+  z-index:-2;
+}
+
+#stars{
+  position:fixed;
+  inset:0;
   z-index:-1;
 }
 
-/* ================= SPLASH PORTAL ================= */
+/* ================= SPLASH ================= */
 #splash{
   position:fixed;
   inset:0;
   background:black;
   display:flex;
-  justify-content:center;
+  flex-direction:column;
+  gap:18px;
   align-items:center;
+  justify-content:center;
   z-index:999;
   animation:fadeOut 1s ease forwards;
   animation-delay:3s;
 }
 
-.portal{
+#portal{
   width:260px;
   height:260px;
   border-radius:50%;
-  background:
-    radial-gradient(circle at center,
-      rgba(0,240,255,.9) 0%,
-      rgba(0,240,255,.5) 35%,
-      rgba(0,0,0,0) 70%);
-  box-shadow:
-    0 0 40px var(--neon-blue),
-    0 0 80px var(--neon-red);
-  animation:spin 2s linear infinite;
+  background:radial-gradient(circle at center,
+    rgba(0,240,255,.9) 0%,
+    rgba(0,240,255,.55) 35%,
+    rgba(0,0,0,0) 70%);
+  box-shadow:0 0 40px var(--neon-blue),0 0 80px var(--neon-red);
+  animation:spin 2.5s linear infinite,pulse 1.2s ease-in-out infinite alternate;
   display:flex;
-  justify-content:center;
   align-items:center;
-  position:relative;
+  justify-content:center;
 }
 
-/* partículas */
-.portal::after{
-  content:"";
-  position:absolute;
-  inset:-20px;
-  border-radius:50%;
-  border:2px dashed rgba(255,255,255,.2);
-  animation:spinReverse 3s linear infinite;
+#portal img{
+  width:75%;
+  border-radius:18px;
+  box-shadow:0 0 25px rgba(0,240,255,.7),0 0 50px rgba(255,0,60,.45);
 }
 
-.portal img{
-  width:70%;
-  border-radius:20px;
-  box-shadow:
-    0 0 30px rgba(0,240,255,.7),
-    0 0 60px rgba(255,0,60,.5);
+#countdown{
+  font-weight:900;
+  letter-spacing:2px;
+  font-size:18px;
+  text-shadow:0 0 18px var(--neon-blue);
+  opacity:.9;
 }
 
 /* ================= MAIN ================= */
@@ -95,89 +104,124 @@ body{
   animation-delay:3s;
   min-height:100vh;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   padding:30px;
 }
 
 .card{
   width:100%;
   max-width:520px;
-  padding:30px;
-  border-radius:24px;
-  background:linear-gradient(180deg, rgba(10,18,40,.9), rgba(5,8,20,.9));
+  background:linear-gradient(180deg, rgba(10,18,40,.92), rgba(5,8,20,.92));
   border:2px solid var(--neon-blue);
-  box-shadow:
-    0 0 40px rgba(0,240,255,.3),
-    0 0 80px rgba(255,0,60,.15);
+  border-radius:22px;
+  padding:28px;
+  box-shadow:0 0 30px rgba(0,240,255,.35),0 0 60px rgba(255,0,60,.18);
+  backdrop-filter: blur(6px);
 }
 
-.header{
-  text-align:center;
-  margin-bottom:40px;
-}
-
+.header{text-align:center;margin-bottom:26px}
 .header h1{
-  font-size:28px;
-  letter-spacing:3px;
-  text-shadow:0 0 18px var(--neon-blue);
+  font-size:26px;
+  letter-spacing:2px;
+  text-shadow:0 0 14px var(--neon-blue);
 }
 
-.header p{
-  margin-top:8px;
-  font-size:14px;
-  opacity:.7;
+.glitch{
+  position:relative;
+  display:inline-block;
+  animation:glow 1.3s ease-in-out infinite alternate;
+}
+.glitch::before,.glitch::after{
+  content:attr(data-text);
+  position:absolute; left:0; top:0;
+  opacity:.35;
+}
+.glitch::before{ transform:translate(1px,-1px); color:var(--neon-blue); }
+.glitch::after{ transform:translate(-1px,1px); color:var(--neon-red); }
+
+#ticker{
+  margin-top:12px;
+  font-size:12px;
+  opacity:.85;
+  color:#c9f7ff;
+  min-height:16px;
+  text-align:center;
 }
 
-/* ================= BOTONES RPG ================= */
+/* ================= BOTONES ================= */
 .links{
   display:flex;
   flex-direction:column;
-  gap:30px;
+  gap:28px;
+  margin-top:18px;
 }
 
 .link-btn{
-  padding:20px;
+  position:relative;
+  padding:18px;
   text-align:center;
   text-decoration:none;
+  color:white;
+  font-size:18px;
   font-weight:900;
   letter-spacing:1px;
-  font-size:18px;
-  border-radius:20px;
   background:linear-gradient(145deg,#0b122c,#040716);
-  position:relative;
-  transition:.3s ease;
+  border-radius:18px;
+  text-transform:uppercase;
+  transition:.25s ease;
 }
 
 .link-btn::before{
   content:"";
   position:absolute;
   inset:-3px;
-  border-radius:22px;
-  background:linear-gradient(90deg,var(--neon-blue),var(--neon-red));
-  filter:blur(8px);
+  border-radius:20px;
+  filter:blur(6px);
   z-index:-1;
 }
 
-.link-btn:hover{
-  transform:scale(1.08);
-  box-shadow:
-    0 0 35px var(--neon-blue),
-    0 0 70px var(--neon-red);
-}
+.link-btn.blue::before{background:linear-gradient(90deg,#00f0ff,#0066ff);}
+.link-btn.red::before{background:linear-gradient(90deg,#ff003c,#ff4d6d);}
+.link-btn.purple::before{background:linear-gradient(90deg,#a855f7,#6d28d9);}
+.link-btn.gold::before{background:linear-gradient(90deg,#ffd700,#ff8c00);}
+.link-btn.green::before{background:linear-gradient(90deg,#00ff9c,#00c853);}
 
+.link-btn:hover{transform:scale(1.06);}
+
+/* Footer */
 .footer{
-  text-align:center;
-  margin-top:35px;
-  font-size:12px;
-  opacity:.5;
+  margin-top:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  font-size:11px;
+  opacity:.75;
+  flex-wrap:wrap;
 }
 
-/* ================= ANIMACIONES ================= */
+#audioBtn{
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:9px 12px;
+  border-radius:14px;
+  font-weight:900;
+}
+
+#audioBtn.on{
+  box-shadow:0 0 18px rgba(0,240,255,.35);
+  border-color:rgba(0,240,255,.45);
+}
+
+/* Animaciones */
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes spinReverse{to{transform:rotate(-360deg)}}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.08)}}
 @keyframes fadeOut{to{opacity:0;pointer-events:none}}
 @keyframes fadeIn{to{opacity:1}}
+@keyframes glow{from{filter:drop-shadow(0 0 8px rgba(0,240,255,.35))}to{filter:drop-shadow(0 0 16px rgba(255,0,60,.25))}}
 </style>
 </head>
 
@@ -185,37 +229,40 @@ body{
 
 <div id="bg"></div>
 <div id="overlay"></div>
+<canvas id="stars"></canvas>
 
 <div id="splash">
-  <div class="portal">
+  <div id="portal">
     <img src="https://i.postimg.cc/8cGWgqjw/IMG-20260120-WA0348.jpg">
   </div>
+  <div id="countdown">ENTRANDO EN: <span id="sec">3</span>...</div>
 </div>
 
 <div id="main">
   <div class="card">
-
     <div class="header">
-      <h1>THE ADRIANO MX</h1>
-      <p>Multiversal Game Portal</p>
+      <h1 class="glitch" data-text="THE ADRIANO">THE ADRIANO</h1>
+      <div id="ticker"></div>
     </div>
 
     <div class="links">
-      <a class="link-btn" href="https://facebook.com" target="_blank">FACEBOOK</a>
-      <a class="link-btn" href="https://tiktok.com" target="_blank">TIKTOK</a>
-      <a class="link-btn" href="https://instagram.com" target="_blank">INSTAGRAM</a>
-      <a class="link-btn" href="https://youtube.com" target="_blank">YOUTUBE</a>
-      <a class="link-btn" href="https://github.com" target="_blank">GITHUB</a>
+      <a class="link-btn blue" href="https://www.facebook.com/share/1B4Eem5ibA/" target="_blank">Facebook</a>
+      <a class="link-btn red" href="https://www.tiktok.com/@el.adriano_plays" target="_blank">TikTok</a>
+      <a class="link-btn purple" href="https://www.instagram.com/soy_adrian0" target="_blank">Instagram</a>
+      <a class="link-btn red" href="https://youtube.com/@theadrianomx" target="_blank">YouTube</a>
+      <a class="link-btn green" href="https://wa.me/19016500693" target="_blank">Whatsapp</a>
+      <a class="link-btn gold" href="https://github.com" target="_blank">GitHub</a>
     </div>
 
-    <div class="footer">⚡ Powered by GitHub Pages</div>
-
+    <div class="footer">
+      <span>⚡ Hosted on GitHub Pages</span>
+      <button id="audioBtn">ACTIVAR AUDIO</button>
+    </div>
   </div>
 </div>
 
 <script>
-/* FONDO ALEATORIO */
-const images = [
+const images=[
 "https://i.postimg.cc/RhrZRmRB/Picsart_25_12_01_19_17_39_435.png",
 "https://i.postimg.cc/rsTW2vKn/IMG_20260121_WA0012.jpg",
 "https://i.postimg.cc/KYkVwCfx/images.jpg",
@@ -224,8 +271,71 @@ const images = [
 "https://i.postimg.cc/XqNwn9RB/LKBJXYFNZFA4ZOPCAUZZBXZMQA.jpg"
 ];
 
-const bg = document.getElementById("bg");
-bg.style.backgroundImage = `url(${images[Math.floor(Math.random()*images.length)]})`;
+const bg=document.getElementById("bg");
+function setBg(url){
+  bg.style.opacity="0";
+  setTimeout(()=>{
+    bg.style.backgroundImage=`url(${url})`;
+    bg.style.opacity="1";
+  },400);
+}
+setBg(images[Math.floor(Math.random()*images.length)]);
+setInterval(()=>setBg(images[Math.floor(Math.random()*images.length)]),10000);
+
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+let stars=[];
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+  stars=Array.from({length:140},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*1.6+.2,
+    v:Math.random()*.5+.15
+  }));
+}
+addEventListener("resize",resize);
+resize();
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const s of stars){
+    s.y+=s.v;
+    if(s.y>canvas.height){s.y=0;}
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle="#dffbff";
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+let sec=3;
+const secEl=document.getElementById("sec");
+const timer=setInterval(()=>{
+  sec--;
+  secEl.textContent=Math.max(0,sec);
+  if(sec<=0)clearInterval(timer);
+},1000);
+
+const ticker=document.getElementById("ticker");
+const lines=["🌀 Portal sincronizado…","🧪 Cargando enlaces…","⚡ Señal estable…","🛸 Bienvenido al multiverso."];
+let li=0,ci=0,typing=true;
+function typeLoop(){
+  const text=lines[li];
+  if(typing){
+    ci++;
+    ticker.textContent=text.slice(0,ci);
+    if(ci>=text.length){typing=false;setTimeout(typeLoop,800);return;}
+  }else{
+    ci--;
+    ticker.textContent=text.slice(0,ci);
+    if(ci<=0){typing=true;li=(li+1)%lines.length;}
+  }
+  setTimeout(typeLoop,typing?30:18);
+}
+typeLoop();
 </script>
 
 </body>
