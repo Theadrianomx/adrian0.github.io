@@ -1,6 +1,232 @@
 <!DOCTYPE html>
-<html>
-<body style="background:black;color:lime;font-size:40px">
-GITHUB PAGES FUNCIONA
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>THE ADRIANO MX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --neon-blue:#00f0ff;
+  --neon-red:#ff003c;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:system-ui,Segoe UI,Arial;
+  background:black;
+  color:white;
+  min-height:100vh;
+}
+
+/* ================= FONDO DINÁMICO ================= */
+#bg{
+  position:fixed;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  filter:blur(18px) brightness(.4);
+  transform:scale(1.1);
+  z-index:-2;
+}
+
+#overlay{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(0,240,255,.15), rgba(0,0,0,.85) 70%);
+  z-index:-1;
+}
+
+/* ================= SPLASH PORTAL ================= */
+#splash{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  animation:fadeOut 1s ease forwards;
+  animation-delay:3s;
+}
+
+.portal{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at center,
+      rgba(0,240,255,.9) 0%,
+      rgba(0,240,255,.5) 35%,
+      rgba(0,0,0,0) 70%);
+  box-shadow:
+    0 0 40px var(--neon-blue),
+    0 0 80px var(--neon-red);
+  animation:spin 2s linear infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+/* partículas */
+.portal::after{
+  content:"";
+  position:absolute;
+  inset:-20px;
+  border-radius:50%;
+  border:2px dashed rgba(255,255,255,.2);
+  animation:spinReverse 3s linear infinite;
+}
+
+.portal img{
+  width:70%;
+  border-radius:20px;
+  box-shadow:
+    0 0 30px rgba(0,240,255,.7),
+    0 0 60px rgba(255,0,60,.5);
+}
+
+/* ================= MAIN ================= */
+#main{
+  opacity:0;
+  animation:fadeIn 1s ease forwards;
+  animation-delay:3s;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px;
+}
+
+.card{
+  width:100%;
+  max-width:520px;
+  padding:30px;
+  border-radius:24px;
+  background:linear-gradient(180deg, rgba(10,18,40,.9), rgba(5,8,20,.9));
+  border:2px solid var(--neon-blue);
+  box-shadow:
+    0 0 40px rgba(0,240,255,.3),
+    0 0 80px rgba(255,0,60,.15);
+}
+
+.header{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.header h1{
+  font-size:28px;
+  letter-spacing:3px;
+  text-shadow:0 0 18px var(--neon-blue);
+}
+
+.header p{
+  margin-top:8px;
+  font-size:14px;
+  opacity:.7;
+}
+
+/* ================= BOTONES RPG ================= */
+.links{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+
+.link-btn{
+  padding:20px;
+  text-align:center;
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:1px;
+  font-size:18px;
+  border-radius:20px;
+  background:linear-gradient(145deg,#0b122c,#040716);
+  position:relative;
+  transition:.3s ease;
+}
+
+.link-btn::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:22px;
+  background:linear-gradient(90deg,var(--neon-blue),var(--neon-red));
+  filter:blur(8px);
+  z-index:-1;
+}
+
+.link-btn:hover{
+  transform:scale(1.08);
+  box-shadow:
+    0 0 35px var(--neon-blue),
+    0 0 70px var(--neon-red);
+}
+
+.footer{
+  text-align:center;
+  margin-top:35px;
+  font-size:12px;
+  opacity:.5;
+}
+
+/* ================= ANIMACIONES ================= */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinReverse{to{transform:rotate(-360deg)}}
+@keyframes fadeOut{to{opacity:0;pointer-events:none}}
+@keyframes fadeIn{to{opacity:1}}
+</style>
+</head>
+
+<body>
+
+<div id="bg"></div>
+<div id="overlay"></div>
+
+<div id="splash">
+  <div class="portal">
+    <img src="https://i.postimg.cc/8cGWgqjw/IMG-20260120-WA0348.jpg">
+  </div>
+</div>
+
+<div id="main">
+  <div class="card">
+
+    <div class="header">
+      <h1>THE ADRIANO MX</h1>
+      <p>Multiversal Game Portal</p>
+    </div>
+
+    <div class="links">
+      <a class="link-btn" href="https://facebook.com" target="_blank">FACEBOOK</a>
+      <a class="link-btn" href="https://tiktok.com" target="_blank">TIKTOK</a>
+      <a class="link-btn" href="https://instagram.com" target="_blank">INSTAGRAM</a>
+      <a class="link-btn" href="https://youtube.com" target="_blank">YOUTUBE</a>
+      <a class="link-btn" href="https://github.com" target="_blank">GITHUB</a>
+    </div>
+
+    <div class="footer">⚡ Powered by GitHub Pages</div>
+
+  </div>
+</div>
+
+<script>
+/* FONDO ALEATORIO */
+const images = [
+"https://i.postimg.cc/RhrZRmRB/Picsart_25_12_01_19_17_39_435.png",
+"https://i.postimg.cc/rsTW2vKn/IMG_20260121_WA0012.jpg",
+"https://i.postimg.cc/KYkVwCfx/images.jpg",
+"https://i.postimg.cc/rsTW2vD8/IMG_20260119_WA1062.jpg",
+"https://i.postimg.cc/Y07gBJvw/97b91b746b97d12ec032e2d335140e65.jpg",
+"https://i.postimg.cc/XqNwn9RB/LKBJXYFNZFA4ZOPCAUZZBXZMQA.jpg"
+];
+
+const bg = document.getElementById("bg");
+bg.style.backgroundImage = `url(${images[Math.floor(Math.random()*images.length)]})`;
+</script>
+
 </body>
 </html>
