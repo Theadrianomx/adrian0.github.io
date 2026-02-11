@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Multiversal Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --neon-blue:#00f0ff;
+  --neon-red:#ff003c;
+  --text:#eaffff;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  min-height:100vh;
+  font-family:system-ui,Segoe UI,Arial;
+  color:var(--text);
+  overflow:hidden;
+}
+
+/* FONDO (con transición) */
+#bg{
+  position:fixed;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  filter:blur(14px) brightness(.45);
+  transform:scale(1.1);
+  z-index:-3;
+  opacity:1;
+  transition:opacity .8s ease;
+}
+
+/* OVERLAY OSCURO */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top, rgba(0,240,255,.12), rgba(0,0,0,.85) 70%),
+    radial-gradient(circle at 80% 30%, rgba(255,0,60,.08), rgba(0,0,0,0) 55%);
+  z-index:-2;
+}
+
+/* PARTÍCULAS */
+#stars{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+}
+
+/* SPLASH */
+#splash{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  animation:fadeOut 1s ease forwards;
+  animation-delay:3s;
+}
+
+#portal{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:radial-gradient(circle at center,
+    rgba(0,240,255,.9) 0%,
+    rgba(0,240,255,.55) 35%,
+    rgba(0,0,0,0) 70%);
+  box-shadow:0 0 40px var(--neon-blue),0 0 80px var(--neon-red);
+  animation:spin 2.5s linear infinite,pulse 1.2s ease-in-out infinite alternate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#portal img{
+  width:75%;
+  border-radius:18px;
+  box-shadow:0 0 25px rgba(0,240,255,.7),0 0 50px rgba(255,0,60,.45);
+}
+
+/* Cronómetro */
+#countdown{
+  font-weight:900;
+  letter-spacing:2px;
+  font-size:18px;
+  text-shadow:0 0 18px var(--neon-blue);
+  opacity:.9;
+}
+
+/* MAIN */
+#main{
+  opacity:0;
+  animation:fadeIn 1s ease forwards;
+  animation-delay:3s;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:520px;
+  background:linear-gradient(180deg, rgba(10,18,40,.92), rgba(5,8,20,.92));
+  border:2px solid var(--neon-blue);
+  border-radius:22px;
+  padding:28px;
+  box-shadow:0 0 30px rgba(0,240,255,.35),0 0 60px rgba(255,0,60,.18);
+  backdrop-filter: blur(6px);
+}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:26px}
+.header h1{
+  font-size:26px;
+  letter-spacing:2px;
+  text-shadow:0 0 14px var(--neon-blue);
+}
+.header p{
+  margin-top:8px;
+  font-size:13px;
+  opacity:.8;
+}
+
+/* Texto animado (glitch + typing feeling) */
+.glitch{
+  position:relative;
+  display:inline-block;
+  animation:glow 1.3s ease-in-out infinite alternate;
+}
+.glitch::before,.glitch::after{
+  content:attr(data-text);
+  position:absolute; left:0; top:0;
+  opacity:.35;
+}
+.glitch::before{ transform:translate(1px,-1px); color:var(--neon-blue); }
+.glitch::after{ transform:translate(-1px,1px); color:var(--neon-red); }
+
+#ticker{
+  margin-top:12px;
+  font-size:12px;
+  opacity:.85;
+  color:#c9f7ff;
+  min-height:16px;
+  text-align:center;
+}
+
+/* LINKS */
+.links{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  margin-top:18px;
+}
+
+.link-btn{
+  position:relative;
+  padding:18px;
+  text-align:center;
+  text-decoration:none;
+  color:white;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:1px;
+  background:linear-gradient(145deg,#0b122c,#040716);
+  border-radius:18px;
+  text-transform:uppercase;
+  transition:.25s ease;
+}
+
+.link-btn::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:20px;
+  filter:blur(6px);
+  z-index:-1;
+}
+.link-btn:hover{ transform:scale(1.06); }
+
+/* Colores */
+.link-btn.blue::before{  background:linear-gradient(90deg,#00f0ff,#0066ff); }
+.link-btn.red::before{   background:linear-gradient(90deg,#ff003c,#ff4d6d); }
+.link-btn.purple::before{background:linear-gradient(90deg,#a855f7,#6d28d9); }
+.link-btn.gold::before{  background:linear-gradient(90deg,#ffd700,#ff8c00); }
+.link-btn.green::before{ background:linear-gradient(90deg,#00ff9c,#00c853); }
+
+/* Footer + Audio */
+.footer{
+  margin-top:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  font-size:11px;
+  opacity:.75;
+  flex-wrap:wrap;
+}
+#audioBtn{
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:9px 12px;
+  border-radius:14px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+#audioBtn.on{
+  box-shadow:0 0 18px rgba(0,240,255,.35);
+  border-color:rgba(0,240,255,.45);
+}
+
+/* Animaciones */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.08)}}
+@keyframes fadeOut{to{opacity:0;pointer-events:none}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes glow{from{filter:drop-shadow(0 0 8px rgba(0,240,255,.35))}to{filter:drop-shadow(0 0 16px rgba(255,0,60,.25))}}
+</style>
+</head>
+
+<body>
+
+<div id="bg"></div>
+<div id="overlay"></div>
+<canvas id="stars"></canvas>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div id="portal">
+    <img src="https://i.postimg.cc/8cGWgqjw/IMG-20260120-WA0348.jpg" alt="Portal">
+  </div>
+  <div id="countdown">ENTRANDO EN: <span id="sec">3</span>...</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="card">
+    <div class="header">
+      <h1 class="glitch" data-text="THE ADRIANO">THE ADRIANO</h1>
+      <p>Multiversal Link Portal</p>
+      <div id="ticker"></div>
+    </div>
+
+    <div class="links">
+      <a class="link-btn blue" href="https://www.facebook.com/share/1B4Eem5ibA/" target="_blank" rel="noopener">Facebook</a>
+      
+      <a class="link-btn red" href="https://www.tiktok.com/@el.adriano_plays?_r=1&_t=ZP-93p1iuOCoVq" target="_blank" rel="noopener">TikTok</a>
+      
+      <a class="link-btn purple" href="https://www.instagram.com/soy_adrian0?igsh=aGE4NThsbWc3MHlw" target="_blank" rel="noopener">Instagram</a>
+      <a class="link-btn red" href="https://youtube.com/@theadrianomx?si=gWxSzz_eKAHnt1Lr" target="_blank" rel="noopener">YouTube</a>
+      
+    <a class="link-btn green" href="https://wa.me/19016500693" target="_blank" rel="noopener">Whatsapp</a>
+            
+      <a class="link-btn gold" href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <div class="footer">
+      <span>⚡ Hosted on Cloudflare Pages</span>
+      <button id="audioBtn" type="button">ACTIVAR AUDIO</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   FONDO ALEATORIO + CAMBIO AUTOMÁTICO
+========================= */
+const images = [
+  "https://i.postimg.cc/RhrZRmRB/Picsart_25_12_01_19_17_39_435.png",
+  "https://i.postimg.cc/rsTW2vKn/IMG_20260121_WA0012.jpg",
+  "https://i.postimg.cc/KYkVwCfx/images.jpg",
+  "https://i.postimg.cc/rsTW2vD8/IMG_20260119_WA1062.jpg",
+  "https://i.postimg.cc/Y07gBJvw/97b91b746b97d12ec032e2d335140e65.jpg",
+  "https://i.postimg.cc/XqNwn9RB/LKBJXYFNZFA4ZOPCAUZZBXZMQA.jpg"
+];
+
+const bg = document.getElementById("bg");
+
+function pickBg(){
+  return images[Math.floor(Math.random() * images.length)];
+}
+
+function setBg(url){
+  // fade out -> change -> fade in
+  bg.style.opacity = "0";
+  setTimeout(()=>{
+    bg.style.backgroundImage = `url(${url})`;
+    bg.style.opacity = "1";
+  }, 400);
+}
+
+// inicial
+setBg(pickBg());
+
+// cambia cada 10 segundos
+setInterval(()=> setBg(pickBg()), 10000);
+
+/* =========================
+   PARTÍCULAS (ESPACIO)
+========================= */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+let stars = [];
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  stars = Array.from({length: 140}, () => ({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*1.6 + 0.2,
+    v: Math.random()*0.5 + 0.15,
+    tw: Math.random()*0.8 + 0.2
+  }));
+}
+addEventListener("resize", resize);
+resize();
+
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const s of stars){
+    s.y += s.v;
+    if(s.y > canvas.height+10){ s.y = -10; s.x = Math.random()*canvas.width; }
+    const a = 0.25 + 0.55*Math.abs(Math.sin(performance.now()*0.001*s.tw));
+    ctx.globalAlpha = a;
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = "#dffbff";
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* =========================
+   TEXTO ANIMADO (TICKER)
+========================= */
+const ticker = document.getElementById("ticker");
+const lines = [
+  "🌀 Portal sincronizado…",
+  "🧪 Cargando enlaces del multiverso…",
+  "⚡ Señal estable… listo para abrir.",
+  "🛸 Bienvenido, humano. No rompas el portal."
+];
+
+let li = 0, ci = 0, typing = true;
+
+function typeLoop(){
+  const text = lines[li];
+  if(typing){
+    ci++;
+    ticker.textContent = text.slice(0, ci);
+    if(ci >= text.length){ typing=false; setTimeout(typeLoop, 900); return; }
+  }else{
+    ci--;
+    ticker.textContent = text.slice(0, ci);
+    if(ci <= 0){ typing=true; li = (li+1)%lines.length; }
+  }
+  setTimeout(typeLoop, typing ? 30 : 18);
+}
+typeLoop();
+
+/* =========================
+   CRONÓMETRO SPLASH (3..2..1)
+========================= */
+const secEl = document.getElementById("sec");
+let sec = 3;
+const timer = setInterval(()=>{
+  sec--;
+  secEl.textContent = Math.max(0, sec);
+  if(sec <= 0) clearInterval(timer);
+}, 1000);
+
+/* =========================
+   AUDIO (Portal + Tick)
+   Nota: Requiere interacción del usuario en móviles.
+========================= */
+const audioBtn = document.getElementById("audioBtn");
+let audioOn = false;
+let audioCtx = null;
+
+function beep(freq=440, ms=90, type="sine", gain=0.06){
+  if(!audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  g.gain.value = gain;
+  o.connect(g);
+  g.connect(audioCtx.destination);
+  o.start();
+  setTimeout(()=>{ o.stop(); }, ms);
+}
+
+function portalWhoosh(){
+  // mini “portal”: barrido rápido
+  beep(220,120,"sawtooth",0.05);
+  setTimeout(()=>beep(440,120,"sawtooth",0.05),90);
+  setTimeout(()=>beep(660,140,"triangle",0.05),180);
+}
+
+function startTick(){
+  // tick suave cada segundo (solo 6s para no molestar)
+  let t = 0;
+  const id = setInterval(()=>{
+    if(!audioOn){ clearInterval(id); return; }
+    beep(880,40,"square",0.03);
+    t++;
+    if(t>=6) clearInterval(id);
+  }, 1000);
+}
+
+audioBtn.addEventListener("click", async ()=>{
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    await audioCtx.resume();
+  }
+  audioOn = !audioOn;
+  audioBtn.classList.toggle("on", audioOn);
+  audioBtn.textContent = audioOn ? "AUDIO ACTIVADO" : "ACTIVAR AUDIO";
+
+  if(audioOn){
+    portalWhoosh();
+    startTick();
+  }
+});
+
+/* Sonido portal al salir del splash (si el usuario activó audio) */
+setTimeout(()=>{
+  if(audioOn) portalWhoosh();
+}, 2900);
+</script>
+
+</body>
+</html>
